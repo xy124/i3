@@ -684,6 +684,15 @@ void x_draw_decoration(Con *con) {
         goto copy_pixmaps;
     }
 
+
+    i3String *title_buttons = NULL;
+    if (title) {
+        if (win)
+            title_buttons = i3string_from_utf8("[O] [X]");
+        else
+            title_buttons = i3string_from_utf8("[X]");
+    }
+
     int title_offset_x;
     switch (config.title_align) {
         case ALIGN_LEFT:
@@ -715,9 +724,19 @@ void x_draw_decoration(Con *con) {
                    */
 
      draw_util_text(title, &(parent->frame_buffer),
-                    p->color->text, p->color->background,
+                   p->color->text, p->color->background,
                    con->deco_rect.x + text_offset_x + logical_px(2),
-                    con->deco_rect.y + text_offset_y,
+                   con->deco_rect.y + text_offset_y,
+                   con->deco_rect.width - text_offset_x - mark_width - 2 * logical_px(2));
+
+     int title_buttons_offset_x = max(title_padding + mark_width, deco_width - title_padding - predict_text_width(title_buttons));
+    draw_util_rectangle(&(parent->frame_buffer), draw_util_hex_to_color("#3333AA"),
+            con->deco_rect.x+title_buttons_offset_x,
+            con->deco_rect.y, 18*3.7, con->deco_rect.height);
+     draw_util_text(title_buttons, &(parent->frame_buffer),
+                   p->color->text, p->color->background,
+                   con->deco_rect.x + title_buttons_offset_x + logical_px(2),
+                   con->deco_rect.y + text_offset_y,
                    con->deco_rect.width - text_offset_x - mark_width - 2 * logical_px(2));
 
 

@@ -178,6 +178,32 @@ static int route_click(Con *con, xcb_button_press_event_t *event, const bool mod
     const bool is_left_or_right_click = (event->detail == XCB_BUTTON_CLICK_LEFT ||
                                          event->detail == XCB_BUTTON_CLICK_RIGHT);
 
+    if (dest == CLICK_DECORATION) {
+        int button_width = 20;
+        Rect rect = con->deco_rect;
+        rect.width = button_width;
+        rect.x = con->deco_rect.x + con->deco_rect.width - button_width;
+        if (rect_contains(rect, event->event_x, event->event_y)) {
+            if (event->response_type == XCB_BUTTON_RELEASE) {
+                DLOG("Closing window using click on [X]\n");
+                tree_close_internal(con, DONT_KILL_WINDOW, false);
+            }
+            goto done;
+        }
+
+        if (con->window) {
+            rect.x = con->deco_rect.x + con->deco_rect.width - button_width*2.7;
+            if (rect_contains(rect, event->event_x, event->event_y)) {
+
+                if (event->response_type == XCB_BUTTON_RELEASE) {
+                    DLOG("toggle floating using click on [O]\n");
+                    toggle_floating_mode(con, false);
+                }
+                goto done;
+            }
+        }
+    }
+
     /* if the user has bound an action to this click, it should override the
      * default behavior. */
     if (dest == CLICK_DECORATION || dest == CLICK_INSIDE || dest == CLICK_BORDER) {
@@ -196,6 +222,14 @@ static int route_click(Con *con, xcb_button_press_event_t *event, const bool mod
             return 0;
         }
     }
+
+    /*if (dest == CLICK_DECORATION && event->detail == 2) {*/
+        /*DLOG("Closing window using middle click\n");*/
+        /*tree_close(con, KILL_WINDOW, false, false);*/
+        /*goto done;*/
+    /*}*/
+
+
 
     /* There is no default behavior for button release events so we are done. */
     if (event->response_type == XCB_BUTTON_RELEASE) {
@@ -294,7 +328,7 @@ static int route_click(Con *con, xcb_button_press_event_t *event, const bool mod
         /* 6: dragging, if this was a click on a decoration (which did not lead
          * to a resize) */
         if (!in_stacked && dest == CLICK_DECORATION &&
-            (event->detail == XCB_BUTTON_CLICK_LEFT)) {
+                (event->detail == XCB_BUTTON_CLICK_LEFT)) {
             floating_drag_window(floatingcon, event);
             return 1;
         }
