@@ -730,7 +730,7 @@ void x_draw_decoration(Con *con) {
                    con->deco_rect.width - text_offset_x - mark_width - 2 * logical_px(2));
 
      int title_buttons_offset_x = max(title_padding + mark_width, deco_width - title_padding - predict_text_width(title_buttons));
-    draw_util_rectangle(&(parent->frame_buffer), draw_util_hex_to_color("#3333AA"),
+    draw_util_rectangle(&(parent->frame_buffer), p->color->background,
             con->deco_rect.x+title_buttons_offset_x,
             con->deco_rect.y, 18*3.7, con->deco_rect.height);
      draw_util_text(title_buttons, &(parent->frame_buffer),
