@@ -193,6 +193,8 @@ int main(int argc, char *argv[]) {
                 message_type = I3_IPC_MESSAGE_TYPE_GET_OUTPUTS;
             } else if (strcasecmp(optarg, "get_tree") == 0) {
                 message_type = I3_IPC_MESSAGE_TYPE_GET_TREE;
+            } else if (strcasecmp(optarg, "get_focus_history") == 0) {
+                message_type = I3_IPC_MESSAGE_TYPE_GET_FOCUS_HISTORY;
             } else if (strcasecmp(optarg, "get_marks") == 0) {
                 message_type = I3_IPC_MESSAGE_TYPE_GET_MARKS;
             } else if (strcasecmp(optarg, "get_bar_config") == 0) {
@@ -209,7 +211,7 @@ int main(int argc, char *argv[]) {
                 message_type = I3_IPC_MESSAGE_TYPE_SUBSCRIBE;
             } else {
                 printf("Unknown message type\n");
-                printf("Known types: run_command, get_workspaces, get_outputs, get_tree, get_marks, get_bar_config, get_binding_modes, get_version, get_config, send_tick, subscribe\n");
+                printf("Known types: run_command, get_workspaces, get_focus_history, get_outputs, get_tree, get_marks, get_bar_config, get_binding_modes, get_version, get_config, send_tick, subscribe\n");
                 exit(EXIT_FAILURE);
             }
         } else if (o == 'q') {

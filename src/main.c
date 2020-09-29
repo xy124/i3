@@ -289,6 +289,8 @@ int main(int argc, char *argv[]) {
      * (file) logging. */
     init_logging();
 
+    focus_history_init();
+
     /* On release builds, disable SHM logging by default. */
     shmlog_size = (is_debug_build() || strstr(argv[0], "i3-with-shmlog") != NULL ? default_shmlog_size : 0);
 

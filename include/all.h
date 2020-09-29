@@ -83,4 +83,5 @@
 #include "display_version.h"
 #include "restore_layout.h"
 #include "sync.h"
+#include "focus_history.h"
 #include "main.h"

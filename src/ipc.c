@@ -844,6 +844,46 @@ IPC_HANDLER(tree) {
     y(free);
 }
 
+IPC_HANDLER(focus_history) {
+    setlocale(LC_NUMERIC, "C");
+    yajl_gen gen = ygenalloc();
+    y(array_open);
+
+
+    /*DLOG("printing focus history\n");*/
+    for (int i = focus_history_last + 1; (i - focus_history_last - 1) < FOCUS_HISTORY_LEN; ++i) {
+        int idx = i % FOCUS_HISTORY_LEN;
+        const focus_history_entry_t * e = &(focus_history[idx]);
+        DLOG("getting focus history item\n");
+        if (e->id < 0) {
+            continue;
+        }
+        /*DLOG("printing focus history item\n");*/
+        //dump_node(gen, con, false);
+        y(map_open);
+        ystr("id");
+        y(integer, e->id);
+
+        ystr("title");
+        ystr(e->title);
+
+        y(map_close);
+    }
+
+    y(array_close);
+
+    setlocale(LC_NUMERIC, "");
+
+    const unsigned char *payload;
+    ylength length;
+    y(get_buf, &payload, &length);
+    /*DLOG("End printing focus history\n");*/
+
+    ipc_send_client_message(client, length, I3_IPC_REPLY_TYPE_FOCUS_HISTORY, payload);
+    y(free);
+
+}
+
 /*
  * Formats the reply message for a GET_WORKSPACES request and sends it to the
  * client
@@ -1296,7 +1336,7 @@ IPC_HANDLER(sync) {
 
 /* The index of each callback function corresponds to the numeric
  * value of the message type (see include/i3/ipc.h) */
-handler_t handlers[12] = {
+handler_t handlers[13] = {
     handle_run_command,
     handle_get_workspaces,
     handle_subscribe,
@@ -1309,6 +1349,7 @@ handler_t handlers[12] = {
     handle_get_config,
     handle_send_tick,
     handle_sync,
+    handle_focus_history
 };
 
 /*

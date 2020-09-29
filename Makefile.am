@@ -506,6 +506,7 @@ i3_SOURCES = \
 	include/ewmh.h \
 	include/fake_outputs.h \
 	include/floating.h \
+	include/focus_history.h \
 	include/handlers.h \
 	include/i3.h \
 	include/ipc.h \
@@ -551,6 +552,7 @@ i3_SOURCES = \
 	src/ewmh.c \
 	src/fake_outputs.c \
 	src/floating.c \
+	src/focus_history.c \
 	src/handlers.c \
 	src/ipc.c \
 	src/key_press.c \
