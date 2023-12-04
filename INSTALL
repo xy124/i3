@@ -1,0 +1,36 @@
+xy124: on the latest ubuntu version some of the dependencies seem to break the build...
+(multiple definition of pipapo...)
+
+so a solution is to compile in a docker container with ubuntu focal
+
+the following docker file works
+
+Dockerfile: (i3-compiler/Dockerfile)
+```
+
+FROM ubuntu:focal
+
+RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Berlin apt install -y git build-essential libxcb1-dev libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev autoconf libxcb-xrm0 libxcb-xrm-dev automake libxcb-shape0-dev
+```
+
+on host:
+```
+podman build -t i3-compiler i3-compiler/
+podman run --rm -it -v ./i3:/i3 i3-compiler
+```
+
+in docker container:
+```
+cd /i3
+rm -rf build
+mkdir build
+autoreconf -i
+cd build
+../configure
+make -j8
+```
+
+to install: copy i3/build/i3 to /usr/bin
+copy too i3/build/i3/i3-msg to /usr/local/bin
+
+then: https://feeblenerd.blogspot.com/2015/11/pretty-i3-with-xfce.html
