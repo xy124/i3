@@ -1406,6 +1406,7 @@ void x_push_changes(Con *con) {
                 change_ewmh_focus((con_has_managed_window(focused) ? focused->window->id : XCB_WINDOW_NONE), last_focused);
 
                 if (to_focus != last_focused && is_con_attached(focused)) {
+                    focus_history_add(focused);
                     ipc_send_window_event("focus", focused);
                 }
             } else {
@@ -1426,6 +1427,7 @@ void x_push_changes(Con *con) {
                 change_ewmh_focus((con_has_managed_window(focused) ? focused->window->id : XCB_WINDOW_NONE), last_focused);
 
                 if (to_focus != XCB_NONE && to_focus != last_focused && focused->window != NULL && is_con_attached(focused)) {
+                    focus_history_add(focused);
                     ipc_send_window_event("focus", focused);
                 }
             }
